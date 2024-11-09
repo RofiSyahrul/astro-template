@@ -1,6 +1,8 @@
 <script lang="ts">
   import BasePopup from '$lib/components/base-popup.svelte';
 
+  const _props: object = $props();
+
   let isOpen = $state(false);
 
   const handleButtonClick = () => {

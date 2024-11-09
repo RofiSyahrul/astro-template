@@ -21,7 +21,6 @@ const { createdBy } = Astro.props;
       {APP_NAME} v{APP_VERSION}
     </h1>
     <code>{JSON.stringify({ createdBy })}</code>
-    {/* @ts-expect-error - Astro client directives are valid */}
     <PopupAndTrigger client:load />
   </main>
 </Document>
