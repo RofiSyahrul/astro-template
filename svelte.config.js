@@ -6,7 +6,7 @@ export default {
       css: {
         preprocessorOptions: {
           scss: {
-            additionalData: `@import './src/lib/styles/mixins.scss';`,
+            additionalData: `@use './src/lib/styles/mixins.scss' as m;`,
           },
         },
       },
