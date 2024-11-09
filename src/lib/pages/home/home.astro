@@ -5,6 +5,7 @@ import Document from '$lib/_document.astro';
 import { oneLine } from '$lib/utils/string';
 
 import type { HomeProps } from './_script.server';
+import PopupAndTrigger from './components/popup-and-trigger.svelte';
 
 export type Props = HomeProps;
 
@@ -20,5 +21,16 @@ const { createdBy } = Astro.props;
       {APP_NAME} v{APP_VERSION}
     </h1>
     <code>{JSON.stringify({ createdBy })}</code>
+    <PopupAndTrigger client:load />
   </main>
 </Document>
+
+<style lang='scss'>
+  main {
+    animation: fadeIn 1s ease-in;
+
+    @include m.lg {
+      gap: 1rem;
+    }
+  }
+</style>

@@ -1,24 +1,29 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { SnackbarDetail } from '$lib/types/snackbar';
 
   export type SnackbarVariant = SnackbarDetail['variant'];
-
-  export type SnackbarEvent = {
-    destroyed: undefined;
-  };
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher, onMount, tick } from 'svelte';
+  import { onMount, tick, type Snippet } from 'svelte';
   import { fly } from 'svelte/transition';
 
-  export let duration: number | null = 3500;
-  export let variant: SnackbarVariant = 'neutral';
+  interface SnackbarProps {
+    children: Snippet;
+    duration?: number | null;
+    onDestroyed?: () => void;
+    variant?: SnackbarVariant;
+  }
 
-  let isActive = false;
+  const {
+    children,
+    duration = 3500,
+    onDestroyed,
+    variant = 'neutral',
+  }: SnackbarProps = $props();
+
+  let isActive = $state(false);
   let timer: ReturnType<typeof setTimeout>;
-
-  const dispatch = createEventDispatcher<SnackbarEvent>();
 
   function close() {
     isActive = false;
@@ -27,7 +32,7 @@
   function remove() {
     clearTimeout(timer);
     close();
-    dispatch('destroyed');
+    onDestroyed?.();
   }
 
   onMount(async () => {
@@ -49,10 +54,10 @@
       role="alert"
       in:fly={{ x: '100%' }}
       out:fly={{ x: '-100%', opacity: 1 }}
-      on:outroend={remove}
+      onoutroendcapture={remove}
     >
       <div class="snackbar__message">
-        <slot />
+        {@render children()}
       </div>
     </div>
   {/if}

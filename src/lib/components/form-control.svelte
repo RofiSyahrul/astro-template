@@ -1,16 +1,30 @@
 <script lang="ts">
   import clsx from 'clsx';
+  import type { Snippet } from 'svelte';
 
-  let className = '';
-  export { className as class };
+  interface FormControlProps {
+    children: Snippet;
+    class?: string;
+    el?: 'div' | 'label';
+    helperText?: string;
+    invalid?: boolean;
+    label: string;
+    required?: boolean;
+  }
 
-  export let el: 'div' | 'label' = 'label';
-  export let invalid = false;
-  export let helperText = '';
-  export let label: string;
-  export let required = false;
+  const {
+    children,
+    class: className = '',
+    el = 'label',
+    helperText = '',
+    invalid = false,
+    label,
+    required = false,
+  }: FormControlProps = $props();
 
-  const parsedHelperText = helperText.replaceAll('$label', label);
+  const parsedHelperText = $derived(
+    helperText.replaceAll('$label', label),
+  );
 </script>
 
 <svelte:element
@@ -24,7 +38,7 @@
     {label}
   </div>
 
-  <slot />
+  {@render children()}
 
   {#if parsedHelperText}
     <div class="helper">{parsedHelperText}</div>
@@ -81,7 +95,7 @@
     font-weight: 700;
     @apply text-base;
 
-    @include xxs {
+    @include m.xxs {
       @apply text-lg;
     }
 

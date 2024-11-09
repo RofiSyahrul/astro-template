@@ -1,12 +1,23 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
+  import type { Snippet } from 'svelte';
+  import type { EventHandler } from 'svelte/elements';
+
   export type FieldElement = HTMLInputElement | HTMLTextAreaElement;
 
-  export type FormCustomEvent = {
-    'input-field': {
-      field: FieldElement;
-      form: HTMLFormElement;
-    };
-  };
+  type InputFieldHandler = (params: {
+    field: FieldElement;
+    form: HTMLFormElement;
+  }) => void;
+
+  interface BaseFormProps {
+    action?: string;
+    children: Snippet;
+    id?: string;
+    method?: 'get' | 'post';
+    name?: string;
+    onInputField?: InputFieldHandler;
+    onSubmit?: EventHandler<SubmitEvent, HTMLFormElement>;
+  }
 
   const INVALID = 'invalid';
 
@@ -49,15 +60,17 @@
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  const {
+    action,
+    children,
+    id,
+    method = 'post',
+    name,
+    onInputField,
+    onSubmit,
+  }: BaseFormProps = $props();
 
-  export let action: string | undefined = undefined;
-  export let id: string | undefined = undefined;
-  export let method: 'dialog' | 'get' | 'post' = 'post';
-  export let name: string | undefined = undefined;
-
-  const dispatch = createEventDispatcher<FormCustomEvent>();
-  let form: HTMLFormElement;
+  let form = $state<HTMLFormElement>();
 
   export function getElement() {
     return form;
@@ -72,7 +85,7 @@
         handleInvalidField(target);
       }
 
-      dispatch('input-field', { field: target, form: this });
+      onInputField?.({ field: target, form: this });
 
       if (target.validity.valid) {
         handleValidField(target);
@@ -81,6 +94,7 @@
   }
 
   function handleInvalid(this: HTMLFormElement, event: Event) {
+    event.preventDefault();
     const target = event.target;
     if (isFieldElement(target)) {
       handleInvalidField(target);
@@ -94,9 +108,9 @@
   {method}
   {name}
   bind:this={form}
-  on:input|capture={handleInput}
-  on:invalid|capture|preventDefault={handleInvalid}
-  on:submit
+  oninputcapture={handleInput}
+  oninvalidcapture={handleInvalid}
+  onsubmit={onSubmit}
 >
-  <slot />
+  {@render children()}
 </form>

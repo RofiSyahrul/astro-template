@@ -1,7 +1,10 @@
-<script lang="ts" context="module">
-  export type InfiniteScrollEvent = {
-    'reach-lowermost': undefined;
-  };
+<script lang="ts" module>
+  interface InfiniteScrollProps {
+    children: Snippet;
+    isLoading?: boolean;
+    onReachLowermost?: () => void;
+    scrollTarget?: string;
+  }
 
   function getScrollTarget(
     thisEl: HTMLDivElement,
@@ -32,14 +35,16 @@
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
 
-  export let isLoading = false;
-  export let scrollTarget: string | undefined = undefined;
+  let {
+    children,
+    isLoading = $bindable(false),
+    onReachLowermost,
+    scrollTarget,
+  }: InfiniteScrollProps = $props();
 
   let element: HTMLDivElement;
-
-  const dispatch = createEventDispatcher<InfiniteScrollEvent>();
 
   export function getElement() {
     return element;
@@ -51,8 +56,8 @@
         ? isReachLowermostOnElement(this)
         : isReachLowermostOnWindow();
 
-    if (isReachLowermost) {
-      dispatch('reach-lowermost');
+    if (isReachLowermost && typeof onReachLowermost === 'function') {
+      onReachLowermost();
     }
   }
 
@@ -70,11 +75,11 @@
 </script>
 
 <div bind:this={element}>
-  <slot />
+  {@render children()}
 
   {#if isLoading}
     <div class="loading" title="Loading...">
-      <span class="spinner" />
+      <span class="spinner"></span>
       <span class="visually-hidden">Loading...</span>
     </div>
   {/if}

@@ -136,6 +136,7 @@ export default [
       'unicorn/no-null': 0,
       'unicorn/no-useless-switch-case': 0,
       'unicorn/no-useless-undefined': 0,
+      'unicorn/prefer-global-this': 0,
       'unicorn/prevent-abbreviations': 0,
     },
 
