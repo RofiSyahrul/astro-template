@@ -1,10 +1,21 @@
 <script lang="ts">
-  export let checked = false;
-  export let inputType: 'radio' | 'checkbox' = 'radio';
-  export let label: string;
-  export let name: string;
-  export let required = false;
-  export let value: string;
+  interface ChipProps {
+    checked?: boolean;
+    inputType?: 'radio' | 'checkbox';
+    label: string;
+    name: string;
+    required?: boolean;
+    value: string;
+  }
+
+  let {
+    checked = $bindable(false),
+    inputType = 'radio',
+    label,
+    name,
+    required = false,
+    value,
+  }: ChipProps = $props();
 </script>
 
 <label>
@@ -41,7 +52,7 @@
     width: 100%;
     @apply text-xs;
 
-    @include xxs {
+    @include m.xxs {
       @apply text-base;
     }
   }

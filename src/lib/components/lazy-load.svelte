@@ -1,7 +1,14 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount, tick, type Snippet } from 'svelte';
 
-  let isMounted = false;
+  interface LazyLoadProps {
+    children: Snippet;
+    placeholder?: Snippet;
+  }
+
+  const { children, placeholder }: LazyLoadProps = $props();
+
+  let isMounted = $state(false);
 
   let div: HTMLDivElement;
 
@@ -34,9 +41,9 @@
 
 <div bind:this={div}>
   {#if isMounted}
-    <slot />
+    {@render children()}
   {:else}
-    <slot name="placeholder" />
+    {@render placeholder?.()}
   {/if}
 </div>
 

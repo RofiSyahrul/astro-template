@@ -1,11 +1,16 @@
-<script lang="ts" context="module">
-  import type { ActionReturn } from 'svelte/action';
+<script lang="ts" module>
+  import type { Snippet } from 'svelte';
+  import type { Action } from 'svelte/action';
+  import type { MouseEventHandler } from 'svelte/elements';
 
-  export type PopupEventMap = {
-    overlayclick: MouseEvent & {
-      currentTarget: EventTarget & HTMLElement;
-    };
-  };
+  type AnimationType = 'enter' | 'leave';
+
+  interface BasePopupProps {
+    children: Snippet;
+    isForceRender?: boolean;
+    isOpen?: boolean;
+    onOverlayClick?: MouseEventHandler<HTMLDivElement>;
+  }
 
   interface PortalParams {
     isForceRender: boolean;
@@ -25,55 +30,48 @@
     return target;
   }
 
-  function portal(
-    element: HTMLDivElement,
-    { isForceRender, target }: PortalParams,
-  ): ActionReturn<HTMLElement> {
-    if (isForceRender || !target) {
-      return { destroy: () => {} };
-    }
+  const portal: Action<HTMLDivElement, PortalParams> = (
+    node,
+    { isForceRender, target },
+  ) => {
+    if (isForceRender || !target) return;
 
-    target.append(element);
-
-    return {
-      destroy() {
-        element.remove();
-      },
-    };
-  }
+    $effect(() => {
+      target.append(node);
+      return () => {
+        node.remove();
+      };
+    });
+  };
 
   const noop = () => {};
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  const {
+    children,
+    isForceRender = false,
+    isOpen = false,
+    onOverlayClick,
+  }: BasePopupProps = $props();
 
-  export let isForceRender = false;
-  export let isOpen = false;
+  const animationType = $derived<AnimationType>(
+    isOpen ? 'enter' : 'leave',
+  );
 
-  let animationType: 'enter' | 'leave' | undefined = undefined;
-  let isShown = false;
-  let portalTarget: HTMLElement | null = null;
+  let isShown = $state(false);
+  let portalTarget = $state<HTMLElement | null>(null);
   let prevOverflow = '';
 
-  const dispatch = createEventDispatcher<PopupEventMap>();
-
   function handleOpen() {
-    animationType = 'enter';
     isShown = true;
 
-    if (typeof window !== 'undefined') {
-      if (!portalTarget && !isForceRender) {
-        portalTarget = getOrCreatePortalTarget(document);
-      }
-
-      prevOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
+    if (!portalTarget && !isForceRender) {
+      portalTarget = getOrCreatePortalTarget(document);
     }
-  }
 
-  function handleClose() {
-    animationType = 'leave';
+    prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
   }
 
   function handleAnimationEnd() {
@@ -83,11 +81,11 @@
     }
   }
 
-  $: if (isOpen) {
-    handleOpen();
-  } else {
-    handleClose();
-  }
+  $effect(() => {
+    if (animationType === 'enter') {
+      handleOpen();
+    }
+  });
 </script>
 
 {#if portalTarget || isForceRender}
@@ -96,21 +94,21 @@
     class="popup"
     data-animation-type={animationType}
     use:portal={{ isForceRender, target: portalTarget }}
-    on:animationend={handleAnimationEnd}
+    onanimationend={handleAnimationEnd}
   >
     <div
       class="overlay"
       role="none"
       tabindex="-1"
-      on:click={e => dispatch('overlayclick', e)}
-      on:keyup={noop}
-    />
+      onclick={onOverlayClick}
+      onkeyup={noop}
+    ></div>
 
     <dialog
       class="scrollbar-thin scrollbar-track-neutral-bright1 scrollbar-thumb-primary-dim"
       open={isShown}
     >
-      <slot />
+      {@render children()}
     </dialog>
   </div>
 {/if}
