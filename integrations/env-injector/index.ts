@@ -63,10 +63,8 @@ export function envInjector(): AstroIntegration {
       'astro:config:setup': async ({ updateConfig }) => {
         const envSchema = await constructEnvSchema();
         updateConfig({
-          experimental: {
-            env: {
-              schema: envSchema,
-            },
+          env: {
+            schema: envSchema,
           },
         });
       },
