@@ -10,17 +10,28 @@ module.exports = {
   ],
 
   ignorePatterns: [
-    '**/.astro/',
-    '**/dist/',
-    '**/node_modules',
-    '**/public',
+    'dist',
+    'node_modules',
+    'public',
+    '**/.astro/**',
+    '**/dist/**',
+    '**/node_modules/**',
+    '**/public/**',
   ],
 
   rules: {
     'at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: ['extends', 'tailwind', 'layer'],
+        ignoreAtRules: [
+          'extends',
+          'tailwind',
+          'layer',
+          'include',
+          'apply',
+          'mixin',
+          'use',
+        ],
       },
     ],
     'custom-media-pattern': [
