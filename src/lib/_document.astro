@@ -1,6 +1,6 @@
 ---
 import { APP_DESC, APP_NAME, APP_NAME_SHORT } from 'astro:env/server';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 
 import appConfig from './app.config';
 import type { LiteralUnion, SEOMeta } from './types/general';
@@ -181,9 +181,9 @@ const links: LinkDescriptor[] = [
 <!doctype html>
 <html lang='id'>
   <head>
-    <ViewTransitions fallback='animate' />
+    <ClientRouter fallback='animate' />
 
-    <meta transition:persist='charset' charset='utf8' />
+    <meta transition:persist='charset' charset='utf-8' />
     <meta
       transition:persist='http-equiv'
       http-equiv='X-UA-Compatible'

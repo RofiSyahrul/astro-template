@@ -1,6 +1,3 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
@@ -8,14 +5,13 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import astroParser from 'astro-eslint-parser';
 import eslintPluginImport from 'eslint-plugin-import';
 import importAlias from 'eslint-plugin-import-alias';
+import eslintPluginSvelte from 'eslint-plugin-svelte';
+import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import svelteParser from 'svelte-eslint-parser';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: import.meta.dirname,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
@@ -38,12 +34,12 @@ export default [
       'plugin:import/warnings',
       'plugin:import/typescript',
       'plugin:astro/recommended',
-      'plugin:svelte/recommended',
-      'plugin:unicorn/all',
       'plugin:@typescript-eslint/recommended',
       'plugin:@typescript-eslint/recommended-requiring-type-checking',
     ),
   ),
+
+  eslintPluginUnicorn.configs.all,
 
   {
     languageOptions: {
@@ -196,7 +192,11 @@ export default [
         parser: '@typescript-eslint/parser',
       },
     },
+    plugins: {
+      svelte: fixupPluginRules(eslintPluginSvelte),
+    },
     rules: {
+      // Svelte recommended rules are enabled by default when plugin is registered
       '@typescript-eslint/await-thenable': 0,
       '@typescript-eslint/no-base-to-string': 0,
       '@typescript-eslint/no-redundant-type-constituents': 0,
@@ -222,6 +222,7 @@ export default [
   {
     files: ['**/*.cjs'],
     rules: {
+      '@typescript-eslint/no-require-imports': 0,
       '@typescript-eslint/no-var-requires': 0,
     },
   },

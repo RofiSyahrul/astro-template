@@ -90,7 +90,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px auto;
     width: 100%;
+    margin: 16px auto;
   }
 </style>

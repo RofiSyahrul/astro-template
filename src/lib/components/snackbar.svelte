@@ -66,14 +66,13 @@
 <style>
   .snackbar {
     display: inline-flex;
-    pointer-events: auto;
     align-items: center;
     justify-content: space-around;
-    border-radius: 4px;
+    min-height: 48px;
     margin: 8px 0;
+    border-radius: 4px;
     box-shadow: var(--shadow-high);
     pointer-events: auto;
-    min-height: 48px;
   }
 
   .snackbar_neutral {
@@ -91,8 +90,8 @@
   .snackbar__message {
     margin: 4px;
     color: transparent;
-    filter: invert(1) brightness(1) grayscale(1) contrast(9);
     background: inherit;
     background-clip: text;
+    filter: invert(1) brightness(1) grayscale(1) contrast(9);
   }
 </style>

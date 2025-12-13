@@ -46,9 +46,5 @@ export function getManifest() {
     icons,
   };
 
-  return new Response(JSON.stringify(manifest), {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  return Response.json(manifest);
 }

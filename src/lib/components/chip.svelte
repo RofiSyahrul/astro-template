@@ -27,29 +27,29 @@
 
 <style lang="scss">
   label {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin: -1px;
-    overflow: hidden;
     padding: 2px;
-    position: relative;
+    overflow: hidden;
   }
 
   span {
-    align-items: center;
-    border: 1px solid var(--color-neutral-dim);
-    border-radius: 32px;
-    color: var(--color-neutral-dim);
-    background-color: transparent;
-    cursor: pointer;
     display: flex;
     gap: 6px;
-    min-height: 36px;
+    align-items: center;
     justify-content: center;
-    text-align: center;
-    padding: 4px 12px;
-    user-select: none;
     width: 100%;
+    min-height: 36px;
+    padding: 4px 12px;
+    color: var(--color-neutral-dim);
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid var(--color-neutral-dim);
+    border-radius: 32px;
+    cursor: pointer;
+    user-select: none;
     @apply text-xs;
 
     @include m.xxs {
@@ -58,8 +58,8 @@
   }
 
   input {
-    left: -9em;
     position: absolute;
+    left: -9em;
 
     &:focus-visible + span {
       outline: 1px solid var(--color-neutral-dim);
@@ -71,8 +71,8 @@
     }
 
     &:checked + span {
-      background-color: var(--color-neutral-dim);
       color: var(--color-neutral-bright);
+      background-color: var(--color-neutral-dim);
     }
 
     &:checked:hover + span {

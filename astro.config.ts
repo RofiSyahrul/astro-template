@@ -1,7 +1,7 @@
 import node from '@astrojs/node';
 import svelte from '@astrojs/svelte';
-import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
 import { env } from './astro.env';
@@ -14,10 +14,11 @@ import {
 
 const isVercel = process.env.DEPLOYMENT_PLATFORM === 'vercel';
 const isSWEnabled = process.env.SW_ENABLED === 'true' || isVercel;
+const PORT = Number(process.env.PORT) || 4321;
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: isVercel ? vercel() : node({ mode: 'standalone' }),
+  adapter: isVercel ? vercel({}) : node({ mode: 'standalone' }),
   build: {
     format: 'file',
     inlineStylesheets: 'auto',
@@ -25,12 +26,9 @@ export default defineConfig({
   devToolbar: {
     enabled: process.env.DEV_TOOLBAR === 'true',
   },
-  experimental: {
-    env,
-  },
+  env,
   integrations: [
     svelte(),
-    tailwind(),
     assetsHashing(),
     envInjector(),
     globalInjector(),
@@ -47,6 +45,7 @@ export default defineConfig({
         'Referrer-Policy': 'no-referrer-when-downgrade',
       }),
     },
+    port: PORT,
   },
   vite: {
     css: {
@@ -56,5 +55,9 @@ export default defineConfig({
         },
       },
     },
+    resolve: {
+      conditions: ['browser', 'import', 'module', 'default'],
+    },
+    plugins: [tailwindcss() as any],
   },
 });

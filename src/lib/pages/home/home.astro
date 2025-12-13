@@ -21,13 +21,14 @@ const { createdBy } = Astro.props;
       {APP_NAME} v{APP_VERSION}
     </h1>
     <code>{JSON.stringify({ createdBy })}</code>
+    {/* @ts-expect-error - Astro client directives are valid */}
     <PopupAndTrigger client:load />
   </main>
 </Document>
 
 <style lang='scss'>
   main {
-    animation: fadeIn 1s ease-in;
+    animation: fade-in 1s ease-in;
 
     @include m.lg {
       gap: 1rem;

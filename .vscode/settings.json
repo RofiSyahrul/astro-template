@@ -42,7 +42,8 @@
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always",
-    "source.fixAll.tslint": "always"
+    "source.fixAll.tslint": "always",
+    "source.fixAll.stylelint": "always"
   },
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
@@ -71,7 +72,16 @@
     "node_modules/**": true,
     "public/**": true
   },
-  "stylelint.packageManager": "yarn",
+  "stylelint.packageManager": "pnpm",
+  "stylelint.validate": [
+    "css",
+    "postcss",
+    "scss",
+    "sass",
+    "less",
+    "astro",
+    "svelte"
+  ],
   "tailwindCSS.emmetCompletions": true,
   "typescript.tsdk": "./node_modules/typescript/lib",
   "tsInterfaceSorter.emptyLineBetweenProperties": false,

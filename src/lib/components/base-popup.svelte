@@ -116,15 +116,15 @@
 <style lang="scss">
   dialog {
     position: relative;
+    max-width: var(--popup-max-width);
+    max-height: var(--popup-max-height);
+    padding: 16px;
     overflow: auto;
+    color: var(--color-neutral-dim);
+    background-color: var(--color-neutral-bright);
     border: none;
     border-radius: 8px;
     box-shadow: var(--shadow-high);
-    color: var(--color-neutral-dim);
-    background-color: var(--color-neutral-bright);
-    max-height: var(--popup-max-height);
-    max-width: var(--popup-max-width);
-    padding: 16px;
     animation-duration: inherit;
     animation-fill-mode: inherit;
   }
@@ -136,22 +136,22 @@
     width: 100%;
     height: 100%;
     background-color: var(--color-neutral-dim0);
-    opacity: 56%;
+    opacity: 0.56;
   }
 
   .popup {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
     animation-duration: 0.2s;
-    animation-fill-mode: both;
     animation-timing-function: ease-in;
-    z-index: 1000;
+    animation-fill-mode: both;
 
     --popup-max-height: 90%;
     --popup-max-width: 95%;
@@ -161,22 +161,22 @@
     }
 
     &[data-animation-type='enter'] {
-      animation-name: fadeIn;
+      animation-name: fade-in;
 
       dialog {
-        animation-name: zoomIn;
+        animation-name: zoom-in;
       }
     }
 
     &[data-animation-type='leave'] {
-      animation-name: fadeOut;
+      animation-name: fade-out;
 
       .overlay {
         pointer-events: none;
       }
 
       dialog {
-        animation-name: zoomOut;
+        animation-name: zoom-out;
       }
     }
   }
