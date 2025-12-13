@@ -32,14 +32,16 @@
 
 * {
   margin: 0;
-  padding: 0;
 }
 
 body {
-  @apply w-full h-full p-0 bg-neutral-bright0 text-neutral-dim;
-
+  width: 100%;
+  height: 100%;
+  padding: 0;
   overflow: auto;
+  color: var(--color-neutral-dim);
   font-family: var(--font-myriad);
+  background-color: var(--color-neutral-bright0);
 }
 
 h1,
@@ -60,7 +62,10 @@ span,
 p,
 input,
 textarea {
-  @apply text-base font-normal;
+  font-weight: 400;
+  font-size: var(--text-base);
+  /* stylelint-disable-next-line custom-property-pattern */
+  line-height: var(--tw-leading, var(--text-base--line-height));
 }
 
 input {

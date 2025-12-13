@@ -1,7 +1,7 @@
 import node from '@astrojs/node';
 import svelte from '@astrojs/svelte';
-import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
 import { env } from './astro.env';
@@ -29,7 +29,6 @@ export default defineConfig({
   env,
   integrations: [
     svelte(),
-    tailwind(),
     assetsHashing(),
     envInjector(),
     globalInjector(),
@@ -59,5 +58,6 @@ export default defineConfig({
     resolve: {
       conditions: ['browser', 'import', 'module', 'default'],
     },
+    plugins: [tailwindcss() as any],
   },
 });

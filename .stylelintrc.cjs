@@ -31,6 +31,8 @@ module.exports = {
           'apply',
           'mixin',
           'use',
+          'config',
+          'theme',
         ],
       },
     ],

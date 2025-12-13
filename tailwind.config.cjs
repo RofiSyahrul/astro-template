@@ -35,7 +35,6 @@ module.exports = {
   content: ['./src/**/*.{astro,svelte}'],
   darkMode: 'class',
   plugins: [
-    require('tailwind-scrollbar'),
     plugin(({ addComponents }) => {
       addComponents({
         '.btn': {
